@@ -15,13 +15,13 @@ function ActualizarHora(){
     
  
     if (horas >= 8 && minutos >= 1 && horas < 12) {
-        pSaludo.textContent = "buenos días";
+        pSaludo.textContent = "Buenos días";
     }
     if (horas >= 12 && minutos >= 1 && horas < 19) {
-        pSaludo.textContent = "buenas tardes";
+        pSaludo.textContent = "Buenas tardes";
     }
     if (horas >= 19 && minutos >= 1) {
-        pSaludo.textContent = "buenas noches";
+        pSaludo.textContent = "Buenas noches";
     }
 }
  
