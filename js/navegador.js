@@ -1,4 +1,5 @@
-function navegador(){
+function navegador()
+  {
       var agente = window.navigator.userAgent;
       var navegadores = ["Chrome", "Firefox", "Safari", "Opera", "Trident", "MSIE", "Edge"];
       for(var i in navegadores){
@@ -11,3 +12,4 @@ function navegador(){
   window.onload = function(){
   browser.textContent = "El navegador es: "+ navegador();
   }
+  
