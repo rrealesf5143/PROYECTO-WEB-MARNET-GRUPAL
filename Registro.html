@@ -92,7 +92,7 @@
            <!-- Articulos-->
           <div class="col-12 col-md-9">
            <!-- <embed src="Audio/preciosoamor.mp3"width="300px "height="25px" console="true "autostart="true "autoplay="true"> -->
-            <form onsubmit="return valida_formulario()">
+            <form onsubmit="return valida_formulario()" method="POST" action="Insert_registro.php">
               
               <div class="form-group">
                 <label for="nombres">Nombres:</label>
@@ -110,13 +110,23 @@
               </div>
 
               <div class="form-group">
+              <label>Tipo Documento</label>
+                <select  name="tipdoc" id="tipdoc" class="form-control">
+                  <option value="1">Cedula de Ciudadania</option>
+                  <option value="3">Cedula de Extranjeria</option>
+                  <option value="4">Pasaporte</option>
+                  <option value="5">Carnet Diplomatico</option>
+                </select>
+              </div>
+
+              <div class="form-group">
                 <label>Identificación: </label>
                 <input type="text" name="identificacion" id="identificacion" class="form-control" placeholder="Identificación" >
               </div>
               
               <div class="form-group">
                 <label>Fecha Nacimiento: </label>
-                <input type="date" id="fechanacimiento" class="form-control" placeholder="dd/mm/aaaa">
+                <input type="text" id="fechanacimiento" name="fechanacimiento" class="form-control" placeholder="dd/mm/aaaa">
               </div>
 
               <div class="form-group">
@@ -131,10 +141,15 @@
                   <label>Correo Electronico: </label>  
                   <input type="email" name="correoelectr" id="correoelectr" class="form-control" placeholder="Correo Electronico">
               </div>
-              
+
               <div class="form-group">
                 <label>Celular</label>
                 <input type="number" name="celular" id="celular" placeholder="Celular" class="form-control">
+              </div>
+
+              <div class="form-group">
+                  <label>Password: </label>  
+                  <input type="Password" name="Pass" id="Passw" class="form-control" placeholder="Password">
               </div>  
                 
                 <div class="form-group">
