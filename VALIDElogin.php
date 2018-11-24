@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!doctype html>
 <html lang="es">
   <head>
@@ -22,21 +26,8 @@
           }
       </style>
       <script >
-        function valida_formulario()
-                      {
-                        campo_nombres=document.getElementByid('nombres').value;
-
-                        alert(campo_nombres);
-
-                        if(campo_nombres==null || valor.length == 0 || /^\s+$/.test(valor))
-                              {
-                                alert('Por Favor diligencie sus Nombres.');
-                                return false;
-                              }
-                              return true;
 
 
-                      }
       </script>
   </head>
   <body>
@@ -57,7 +48,7 @@
                   <a class="nav-item nav-link" href="Quienes_somos.html">¿Quíenes Somos?</a>
                   <a class="nav-item nav-link" href="Lo_q_hacemos.html">Lo que hacemos</a>
                   <a class="nav-item nav-link mr-md-4" href="Lo_q_sonamos.html">Lo que soñamos</a>
-                  <div><a href="Login.html" class="btn btn-alert">Login</a></div>
+                  <div><a href="Registro.html" class="btn btn-alert">Registro</a></div>
                 </div>    
               </div>
             </nav>
@@ -85,143 +76,63 @@
       <!-- END Visual imagen destacada -->
       <!-- Start main -->
       <div class="container mb-5">
-        <h3>Registro</h3>
-        <p class="lead">Registrate para que se te puedan enviar noticias de los nuevos lanzamientos</p>
+        <h3>Login</h3>
+        <p class="lead">Accede para realizar pedidos y ver catálogos exclusivos</p>
         <hr>
         <div class="row">
            <!-- Articulos-->
           <div class="col-12 col-md-9">
-           <!-- <embed src="Audio/preciosoamor.mp3"width="300px "height="25px" console="true "autostart="true "autoplay="true"> -->
-            <!--<form onsubmit="return valida_formulario()" method="POST" action="Insert_registro.php">
-              
-              <div class="form-group">
-                <label for="nombres">Nombres:</label>
-                <input type="text" name="nombres" placeholder="Nombres" id="nombres" class="form-control">
-              </div>
+           <!--AQUI SE PONEN LOS METODOS DE INCIO DE SESION -->
+<?php
 
-              <div class="form-group">
-                <label for="primapellido">Primer Apellido</label>
-                <input type="text" name="primapellido" id="primapellido" class="form-control" placeholder="Primer Apellido">
-              </div>
-              
-              <div class="form-group">
-                <label for="secapellido">Segundo Apellido</label>
-                <input type="text" name="secapellido" id="secapellido" class="form-control" placeholder="Segundo Apellido">
-              </div>
+	// Connection info. file
+	include 'conn.php';	
+	
+	// Connection variables
+	$conn = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 
-              <div class="form-group">
-              <label>Tipo Documento</label>
-                <select  name="tipdoc" id="tipdoc" class="form-control">
-                  <option value="1">Cedula de Ciudadania</option>
-                  <option value="3">Cedula de Extranjeria</option>
-                  <option value="4">Pasaporte</option>
-                  <option value="5">Carnet Diplomatico</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label>Identificación: </label>
-                <input type="text" name="identificacion" id="identificacion" class="form-control" placeholder="Identificación" >
-              </div>
-              
-              <div class="form-group">
-                <label>Fecha Nacimiento: </label>
-                <input type="text" id="fechanacimiento" name="fechanacimiento" class="form-control" placeholder="dd/mm/aaaa">
-              </div>
-
-              <div class="form-group">
-              <label>Genero</label>
-                <select  name="genero" id="gener" class="form-control">
-                  <option value="F">Femenino</option>
-                  <option value="M">Masculino</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                  <label>Correo Electronico: </label>  
-                  <input type="email" name="correoelectr" id="correoelectr" class="form-control" placeholder="Correo Electronico">
-              </div>
-
-              <div class="form-group">
-                <label>Celular</label>
-                <input type="number" name="celular" id="celular" placeholder="Celular" class="form-control">
-              </div>
-
-              <div class="form-group">
-                  <label>Password: </label>  
-                  <input type="Password" name="Pass" id="Passw" class="form-control" placeholder="Password">
-              </div>  
-                
-                <div class="form-group">
-                  <input type="submit"  class="btn btn-warning" value="Envíar">
-                </div>
+	// Check connection
+	if (!$conn) {
+		die("Connection failed: " . mysqli_connect_error());
+	}
+	
+	// data sent from form login.html 
+	$email = $_POST['User']; 
+	$password = $_POST['Pass'];
+	
+	// Query sent to database
+	$result = mysqli_query($conn, "SELECT nombres,email,password FROM  clientes WHERE Email = '$email'");
+	
+	// Variable $row hold the result of the query
+	$row = mysqli_fetch_assoc($result);
+	
+	// Variable $hash hold the password hash on database
+	//echo'Registro: '.$email.' '.$password;
+	//echo'Registro: '.$row['nombres'].' '.$row['password'];
+	$hash = $row['password'];
+	
+	/* 
+	password_Verify() function verify if the password entered by the user
+	match the password hash on the database. If everything is ok the session
+	is created for one minute. Change 1 on $_SESSION[start] to 5 for a 5 minutes session.
+	*/
+	if ($_POST['Pass'] == $row['password']) {	
+	//echo'Registro: '.$email.' '.$password;
+		$_SESSION['loggedin'] = true;
+		$_SESSION['nombres'] = $row['nombres'];
+		$_SESSION['start'] = time();
+		$_SESSION['expire'] = $_SESSION['start'] + (1 * 60) ;						
+		
+		echo "<div class='alert alert-success' role='alert'><strong>Welcome!</strong> $row[nombres]			
+		<!--<p><a href='edit-profile.php'>Edit Profile</a></p>-->	
+		<p><a href='logout.php'>Logout</a></p></div>";	
+	
+	} else {
+		echo "<div class='alert alert-danger' role='alert'>Email or Password are incorrects!
+		<p><a href='Login.html'><strong>Please try again!</strong></a></p></div>";			
+	}	
+?>         
             
-            </form>-->
-            <?php
-//include("Conexion.php");
-	
-    $usuario = "root";
-	$password = "servidor";
-	$servidor = "localhost";
-	$basededatos = "MARNET";
-	
-	$conexion = mysqli_connect( $servidor, $usuario, $password ) or die ("No se ha podido conectar al servidor de Base de datos");
-	// Selección del a base de datos a utilizar
-	$db = mysqli_select_db( $conexion, $basededatos ) or die ( "Upps! Pues va a ser que no se ha podido conectar a la base de datos" );
-
-	//@mysqlI_query("SET NAMES 'utf8'");
-	
-$nombres  = $_POST["nombres"];
-$primape  = $_POST["primapellido"];
-$secape   = $_POST["secapellido"];
-$tipodoc  = $_POST["tipdoc"];
-$identif  = $_POST["identificacion"];
-$fechanac = $_POST["fechanacimiento"];
-$email    = $_POST["correoelectr"];
-$celular  = $_POST["celular"];
-$pass     = $_POST["Pass"];
-$genero   = $_POST["genero"];
-	
-
-
-//echo ' <p>'.$nombres.' '.$primape.' '.$secape.' '.$tipodoc.' '.$identif.' '.$fechanac.' '.$email.' '.$celular.' '.$pass.'</p>' ;
-
-
-//Preparamos la orden SQL
-$consulta = "INSERT INTO clientes
-(
-tipo_identificacion
-,identificacion
-,nombres
-,Primer_Apellido
-,Segundo_Apellido
-,fecha_nacimiento
-,genero
-,numero_celular
-,Email
-,password
-) VALUES (
-'$tipodoc','$identif','$nombres','$primape','$secape','$fechanac','$genero','$celular','$email','$pass'
-)";
-
-//Aqui ejecutaremos esa orden
-
-$resultado = mysqli_query( $conexion, $consulta );
-
-
-
-if(!$resultado){
-echo'<h1>Hubo un error   '.$consulta.'</h1>';
-}else {
-			echo'<h1>Datos Guardados con exito</h1>';//.$nombres.' '.$primape.' '.$secape.' '.$tipodoc.' '.$identif.' '.$fechanac.' '.$email.' '.$celular.' '.$pass.'</p>';
-			}
-	
-
-
-
-mysqli_close( $conexion );
-
-?>
           </div>
            <!-- END Articulos -->
            <!-- Aside-->
