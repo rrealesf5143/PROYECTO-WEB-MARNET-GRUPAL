@@ -19,10 +19,14 @@ tipo_cliente                 varchar(50),
 password         varchar(100)
 ); 
 
+
+
 CREATE UNIQUE INDEX ID_UNICO_CLIENTES ON clientes 
 (
 tipo_identificacion,identificacion
 );
+
+create unique index idx_email_unico on clientes (Email);
 
 drop table if exists Direcciones;
 create table Direcciones(
